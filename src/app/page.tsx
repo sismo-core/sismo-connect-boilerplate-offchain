@@ -17,10 +17,9 @@ const sismoConnectConfig: SismoConnectConfig = {
     // For development purposes insert the identifier that you want to impersonate here
     // Never use this in production
     impersonate: [
-      "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045",
-      "0x66ee17d0e530fa9dec4eedb2ddd92fc3fcb1528f",
-      "github:leosayous21",
-      "twitter:dhadrien_:2390703980",
+      "dhadrien.sismo.eth",
+      "github:dhadrien",
+      "twitter:dhadrien_",
     ],
   },
 };
