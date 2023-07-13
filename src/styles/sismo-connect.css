@@ -1,0 +1,73 @@
+html {
+  background-color: rgb(5, 5, 5);
+  color: rgb(237, 237, 237);
+}
+
+h1 {
+  font-size: 40px;
+  font-weight: 400;
+  margin-bottom: 32px;
+}
+
+.code {
+  background-color: rgb(26, 26, 26);
+  border: solid 1px rgb(45, 45, 45);
+  color: rgb(236, 89, 21);
+  padding: 3px 7px;
+  border-radius: 5px;
+}
+
+.introduction {
+  max-width: 500px;
+  line-height: 21px;
+}
+
+.main {
+  margin: 30vh auto 0 auto;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 750px
+}
+
+button {
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.disconnect {
+  background-color: rgb(212, 212, 212);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 30px;
+  height: 40px;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 22px;
+  padding: 0px 25px;
+}
+
+#user-table {
+  background-color: rgb(10, 10, 10);
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  border: solid 1px rgb(45, 45, 45);
+  border-radius: 4px;
+}
+
+#user-table th {
+  border: solid 1px rgb(45, 45, 45);
+  padding: 8px;
+  text-align: left;
+  min-width: 220px;
+}
+
+#user-table td {
+  border: solid 1px rgb(45, 45, 45);
+  padding: 8px;
+  text-align: center;
+}

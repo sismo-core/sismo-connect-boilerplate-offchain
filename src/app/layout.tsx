@@ -1,11 +1,12 @@
-import "./globals.css";
+import "../styles/globals.css";
+import "../styles/sismo-connect.css";
 import { Inter } from "next/font/google";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "Boilerplate - Sismo Connect offchain",
-  description: "A simple authentication example using Sismo Connect",
+  title: "Create Sismo Connect",
+  description: "Sismo Connect Starter, offchain example",
 };
 
 export default function RootLayout({
