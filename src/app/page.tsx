@@ -1,167 +1,148 @@
 "use client";
 
-import styles from "./page.module.css";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
-  AuthType,
-  ClaimType,
   SismoConnectButton,
   SismoConnectConfig,
   SismoConnectResponse,
 } from "@sismo-core/sismo-connect-react";
+import {
+  appId,
+  auths,
+  claims,
+  signature,
+  vaultConfig,
+} from "../../sismo-connect-config";
+import { User } from "../types";
 
-/* ***********************  Sismo Connect Config *************************** */
 const sismoConnectConfig: SismoConnectConfig = {
-  appId: "0xf4977993e52606cfd67b7a1cde717069",
-  vault: {
-    // For development purposes insert the identifier that you want to impersonate here
-    // Never use this in production
-    impersonate: [
-      "dhadrien.sismo.eth",
-      "github:dhadrien",
-      "twitter:dhadrien_",
-    ],
-  },
+  appId: appId,
+  vault: vaultConfig,
 };
 
 export default function Home() {
-  /* ***********************  Application states *************************** */
   const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+  const [user, setUser] = useState<User | null>(null);
+  const isConnected = Boolean(user);
 
-  const [user, setUser] = useState<{
-    id: string;
-    name: string;
-  } | null>(null);
-  const [userInput, setUserInput] = useState<string>("");
-
-  function onUserInput(e: React.ChangeEvent<HTMLInputElement>) {
-    setUserInput(e.target.value);
-    localStorage.setItem("user-input", e.target.value);
-  }
-
-  useEffect(() => {
-    const storedUserInput = localStorage.getItem("user-input");
-    if (storedUserInput) setUserInput(storedUserInput);
-  }, []);
-
-  async function onSismoConnectResponse(response: SismoConnectResponse) {
+  async function signIn(response: SismoConnectResponse) {
     setLoading(true);
-
     try {
-      const res = await fetch("/api/verify", {
+      const body = {
+        response,
+      };
+      const res = await fetch("/api/sign-in", {
         method: "POST",
-        body: JSON.stringify(response),
+        body: JSON.stringify(body),
       });
       if (!res.ok) {
         const error = await res.json();
-        setError(error);
+        console.error(error);
         return;
       }
-      const user = await res.json();
+      const user: User = await res.json();
       setUser(user);
     } catch (err: any) {
-      setError(err.message);
+      console.error(err.message);
     } finally {
       setLoading(false);
     }
   }
 
-  function resetApp() {
-    setUser(null);
-    setUserInput("");
-    setLoading(false);
-    setError(null);
-    localStorage.removeItem("user-input");
-    const url = new URL(window.location.href);
-    url.searchParams.delete("sismoConnectResponseCompressed");
-    window.history.replaceState({}, "", url.toString());
-  }
-
   return (
-    <>
-      <main className={styles.main}>
-        <h1>
-          <b> Boilerplate</b>
-          <br />
-          Sismo Connect offchain
-        </h1>
-
-        {user && (
-          <>
-            <p>Verified user: {user.name}</p>
-            <p>User id: {user.id}</p>
-          </>
-        )}
-
-        {!user && (
-          <>
-            <p>Using Sismo Connect we will authenticate a user:</p>
+    <main className="main">
+      {!isConnected && (
+        <>
+          <h1>
+            <b> Sismo Connect Starter</b>
             <br />
-            <ul>
-              <li>
-                Sybil-resistance: proving a unique gitcoin passport with a score
-                above 15
-              </li>
-              <li>
-                Gated: authentication is only available for Sismo Contributors
-              </li>
-            </ul>
-            <br />
-            <label>Your name</label>
-            <input
-              value={userInput}
-              onChange={onUserInput}
-              disabled={loading}
-            />
-
-            <SismoConnectButton
-              // the client config created
-              config={sismoConnectConfig}
-              // the auth request we want to make
-              // here we want the proof of a Sismo Vault ownership from our users
-              auths={[
-                { authType: AuthType.VAULT },
-                { authType: AuthType.EVM_ACCOUNT },
-              ]}
-              claims={[
-                // we ask the user to prove that he has a gitcoin passport with a score above 15
-                // https://factory.sismo.io/groups-explorer?search=0x1cde61966decb8600dfd0749bd371f12
-                {
-                  groupId: "0x1cde61966decb8600dfd0749bd371f12",
-                  claimType: ClaimType.GTE,
-                  value: 15,
-                },
-                // we ask the user to prove that he is part of the Sismo Contributors group and selectively prove its level
-                // https://factory.sismo.io/groups-explorer?search=0xe9ed316946d3d98dfcd829a53ec9822e
-                {
-                  groupId: "0xe9ed316946d3d98dfcd829a53ec9822e",
-                  isSelectableByUser: true,
-                },
-                // we optionally ask the user to prove that he is following Sismo on Lens
-                // https://factory.sismo.io/groups-explorer?search=0xabf3ea8c23ff96893ac5caf4d2fa7c1f
-                {
-                  groupId: "0xabf3ea8c23ff96893ac5caf4d2fa7c1f",
-                  isOptional: true,
-                },
-              ]}
-              // we ask the user to sign a message
-              signature={{ message: userInput, isSelectableByUser: true }}
-              // onResponseBytes calls a 'setResponse' function with the responseBytes returned by the Sismo Vault
-              onResponse={(response: SismoConnectResponse) => {
-                onSismoConnectResponse(response);
-              }}
-              verifying={loading}
-            />
-          </>
-        )}
-        {(user || error) && (
-          <button className={styles.disconnect} onClick={() => resetApp()}>
-            Reset
+            Offchain example
+          </h1>
+          <p className="introduction">
+            Welcome! This starter provides a comprehensive example of account
+            connection management using Sismo Connect.{" "}
+          </p>
+          <p className="introduction">
+            Get started by editing{" "}
+            <span className="code">/src/app/page.tsx</span>
+          </p>
+          <SismoConnectButton
+            config={sismoConnectConfig}
+            auths={auths}
+            claims={claims}
+            // we ask the user to sign a message
+            signature={signature}
+            onResponse={(response: SismoConnectResponse) => {
+              signIn(response);
+            }}
+            verifying={loading}
+            overrideStyle={{
+              width: 250,
+              marginTop: 30,
+            }}
+          />
+        </>
+      )}
+      {isConnected && (
+        <>
+          <h1>
+            <b>Your account</b>
+          </h1>
+          {user && (
+            <table id="user-table">
+              <tbody>
+                <tr>
+                  <th>UserId</th>
+                  <td>{user.id}</td>
+                </tr>
+                <tr>
+                  <th>Gitcoin score</th>
+                  <td>{user.gitcoinScore}</td>
+                </tr>
+                <tr>
+                  <th>Sismo contributor level</th>
+                  <td>{user.sismoContributorLevel}</td>
+                </tr>
+                <tr>
+                  <th>Is Lens follower</th>
+                  <td>
+                    {user.isSismoLensFollower !== undefined
+                      ? user.isSismoLensFollower
+                        ? "Yes"
+                        : "No"
+                      : "Not shared"}
+                  </td>
+                </tr>
+                <tr>
+                  <th>EVM Account</th>
+                  <td>{user.address ?? "Not shared"}</td>
+                </tr>
+                <tr>
+                  <th>Twitter Id</th>
+                  <td>{user.twitterId ?? "Not shared"}</td>
+                </tr>
+                <tr>
+                  <th>Github Id</th>
+                  <td>{user.githubId ?? "Not shared"}</td>
+                </tr>
+                <tr>
+                  <th>Telegram Id</th>
+                  <td>{user.telegramId ?? "Not shared"}</td>
+                </tr>
+              </tbody>
+            </table>
+          )}
+          <button
+            className="disconnect"
+            onClick={() =>
+              (window.location.href =
+                window.location.origin + window.location.pathname)
+            }
+          >
+            Disconnect
           </button>
-        )}
-        {error && <p className={styles.error}>{error}</p>}
-      </main>
-    </>
+        </>
+      )}
+    </main>
   );
 }
