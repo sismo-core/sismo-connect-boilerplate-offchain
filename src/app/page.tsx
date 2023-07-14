@@ -131,7 +131,10 @@ export default function Home() {
                 <tr key={index}>
                   <td>Requested Claim {index + 1}</td>
                   <td>
-                    <a href={"https://factory.sismo.io/groups-explorer?search=" + claim.groupId}>
+                    <a
+                      target="_blank"
+                      href={"https://factory.sismo.io/groups-explorer?search=" + claim.groupId}
+                    >
                       {claim.groupId}
                     </a>
                   </td>
