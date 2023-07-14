@@ -1,167 +1,179 @@
 "use client";
 
 import styles from "./page.module.css";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
-  AuthType,
-  ClaimType,
   SismoConnectButton,
-  SismoConnectConfig,
   SismoConnectResponse,
+  SismoConnectVerifiedResult,
 } from "@sismo-core/sismo-connect-react";
 
-/* ***********************  Sismo Connect Config *************************** */
-const sismoConnectConfig: SismoConnectConfig = {
-  appId: "0xf4977993e52606cfd67b7a1cde717069",
-  vault: {
-    // For development purposes insert the identifier that you want to impersonate here
-    // Never use this in production
-    impersonate: [
-      "dhadrien.sismo.eth",
-      "github:dhadrien",
-      "twitter:dhadrien_",
-    ],
-  },
-};
+import {
+  CONFIG,
+  AUTHS,
+  CLAIMS,
+  SIGNATURE_REQUEST,
+  AuthType,
+  ClaimType,
+} from "./sismo-connect-config";
 
 export default function Home() {
+  const [sismoConnectVerifiedResult, setSismoConnectVerifiedResult] =
+    useState<SismoConnectVerifiedResult>();
+  const [verifyState, setVerifyState] = useState<string>("init");
   /* ***********************  Application states *************************** */
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const [user, setUser] = useState<{
-    id: string;
-    name: string;
-  } | null>(null);
-  const [userInput, setUserInput] = useState<string>("");
-
-  function onUserInput(e: React.ChangeEvent<HTMLInputElement>) {
-    setUserInput(e.target.value);
-    localStorage.setItem("user-input", e.target.value);
-  }
-
-  useEffect(() => {
-    const storedUserInput = localStorage.getItem("user-input");
-    if (storedUserInput) setUserInput(storedUserInput);
-  }, []);
-
-  async function onSismoConnectResponse(response: SismoConnectResponse) {
-    setLoading(true);
-
-    try {
-      const res = await fetch("/api/verify", {
-        method: "POST",
-        body: JSON.stringify(response),
-      });
-      if (!res.ok) {
-        const error = await res.json();
-        setError(error);
-        return;
-      }
-      const user = await res.json();
-      setUser(user);
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  function resetApp() {
-    setUser(null);
-    setUserInput("");
-    setLoading(false);
-    setError(null);
-    localStorage.removeItem("user-input");
-    const url = new URL(window.location.href);
-    url.searchParams.delete("sismoConnectResponseCompressed");
-    window.history.replaceState({}, "", url.toString());
-  }
-
   return (
     <>
       <main className={styles.main}>
         <h1>
-          <b> Boilerplate</b>
-          <br />
-          Sismo Connect offchain
+          <b> Sismo Connect Offchain Starter</b>
         </h1>
+        <h3>A Next.js starter repository for Sismo Connect offchain Apps</h3>
+        <h3>
+          <a href="https://docs.sismo.io"> Read the docs!</a>{" "}
+        </h3>
+        <br />
+        <br />
 
-        {user && (
-          <>
-            <p>Verified user: {user.name}</p>
-            <p>User id: {user.id}</p>
-          </>
-        )}
-
-        {!user && (
-          <>
-            <p>Using Sismo Connect we will authenticate a user:</p>
-            <br />
-            <ul>
-              <li>
-                Sybil-resistance: proving a unique gitcoin passport with a score
-                above 15
-              </li>
-              <li>
-                Gated: authentication is only available for Sismo Contributors
-              </li>
-            </ul>
-            <br />
-            <label>Your name</label>
-            <input
-              value={userInput}
-              onChange={onUserInput}
-              disabled={loading}
-            />
-
+        <>
+          <p>
+            Using Sismo Connect we are requesting ZK Proofs from users and verify them. Here we are
+            requesting many ZK Proofs, so generation time is long, especially the firs time.
+          </p>
+          <p></p>
+          <p>
+            Feel free to delete or update auths and claims requests in{" "}
+            <b>src/app/sismo-connect-config.ts</b>{" "}
+          </p>
+          {verifyState == "init" ? (
             <SismoConnectButton
-              // the client config created
-              config={sismoConnectConfig}
-              // the auth request we want to make
-              // here we want the proof of a Sismo Vault ownership from our users
-              auths={[
-                { authType: AuthType.VAULT },
-                { authType: AuthType.EVM_ACCOUNT },
-              ]}
-              claims={[
-                // we ask the user to prove that he has a gitcoin passport with a score above 15
-                // https://factory.sismo.io/groups-explorer?search=0x1cde61966decb8600dfd0749bd371f12
-                {
-                  groupId: "0x1cde61966decb8600dfd0749bd371f12",
-                  claimType: ClaimType.GTE,
-                  value: 15,
-                },
-                // we ask the user to prove that he is part of the Sismo Contributors group and selectively prove its level
-                // https://factory.sismo.io/groups-explorer?search=0xe9ed316946d3d98dfcd829a53ec9822e
-                {
-                  groupId: "0xe9ed316946d3d98dfcd829a53ec9822e",
-                  isSelectableByUser: true,
-                },
-                // we optionally ask the user to prove that he is following Sismo on Lens
-                // https://factory.sismo.io/groups-explorer?search=0xabf3ea8c23ff96893ac5caf4d2fa7c1f
-                {
-                  groupId: "0xabf3ea8c23ff96893ac5caf4d2fa7c1f",
-                  isOptional: true,
-                },
-              ]}
+              config={CONFIG}
+              // Auths = Data Source Ownership Requests
+              auths={AUTHS}
+              // Claims = prove groump membership of a Data Source in a specific Data Group.
+              // Data Groups = [{[dataSource1]: value1}, {[dataSource1]: value1}, .. {[dataSource]: value}]
+              // When doing so Data Source is not shared to the app.
+              claims={CLAIMS}
               // we ask the user to sign a message
-              signature={{ message: userInput, isSelectableByUser: true }}
+              signature={SIGNATURE_REQUEST}
               // onResponseBytes calls a 'setResponse' function with the responseBytes returned by the Sismo Vault
-              onResponse={(response: SismoConnectResponse) => {
-                onSismoConnectResponse(response);
+              onResponse={async (response: SismoConnectResponse) => {
+                setVerifyState("verifying");
+                const verifiedResult = await fetch("/api/verify", {
+                  method: "POST",
+                  body: JSON.stringify(response),
+                });
+                setSismoConnectVerifiedResult(await verifiedResult.json());
+                setVerifyState("verified");
               }}
-              verifying={loading}
             />
-          </>
-        )}
-        {(user || error) && (
-          <button className={styles.disconnect} onClick={() => resetApp()}>
-            Reset
-          </button>
-        )}
-        {error && <p className={styles.error}>{error}</p>}
+          ) : (
+            <>
+              <br></br>
+              <br></br>
+              <br></br>
+              <p>{verifyState == "verifying" ? "Verifying ZK Proofs..." : "ZK Proofs verified!"}</p>
+              <br></br>
+              <br></br>
+            </>
+          )}
+          <h3>Auths requested and verified</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Auth</th>
+                <th>AuthType</th>
+                <th>Requested UserId</th>
+                <th>Is Optional?</th>
+                <th>Verified UserId</th>
+              </tr>
+            </thead>
+            <tbody>
+              {AUTHS.map((auth, index) => (
+                <tr key={index}>
+                  <td>Requested Auth {index + 1}</td>
+                  <td>{AuthType[auth.authType]}</td>
+                  <td>{readibleUserId(auth.userId || "No userId requested")}</td>
+                  <td>{auth.isOptional ? "yes" : "no"}</td>
+                  {sismoConnectVerifiedResult ? (
+                    <td>
+                      {sismoConnectVerifiedResult.auths.filter(
+                        (verifiedAuth) => verifiedAuth.authType == auth.authType
+                      ).length > 0
+                        ? sismoConnectVerifiedResult.auths
+                            .filter((verifiedAuth) => verifiedAuth.authType == auth.authType)
+                            .map((verifiedAuth) => readibleUserId(verifiedAuth.userId!))
+                        : "Not Proved"}
+                    </td>
+                  ) : (
+                    <td> ZK Proofs not verified yet </td>
+                  )}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <br />
+          <h3>Claims requested and verified</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Claim</th>
+                <th>GroupId</th>
+                <th>Is Selectable By User?</th>
+                <th>Is Optional?</th>
+                <th>Requested Value</th>
+                <th>ClaimType</th>
+                <th>Verified Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              {CLAIMS.map((claim, index) => (
+                <tr key={index}>
+                  <td>Requested Claim {index + 1}</td>
+                  <td>
+                    <a
+                      target="_blank"
+                      href={"https://factory.sismo.io/groups-explorer?search=" + claim.groupId}
+                    >
+                      {claim.groupId}
+                    </a>
+                  </td>
+                  <td>{claim.isSelectableByUser ? "yes" : "no"}</td>
+                  <td>{claim.isOptional ? "yes" : "no"}</td>
+                  <td>{claim.value ? claim.value : "1"}</td>
+                  <td>{ClaimType[claim.claimType || "1"]}</td>
+                  {sismoConnectVerifiedResult ? (
+                    <td>
+                      {sismoConnectVerifiedResult.claims.filter(
+                        (verifiedClaim) =>
+                          verifiedClaim.groupId == claim.groupId &&
+                          verifiedClaim.claimType == claim.claimType
+                      ).length > 0
+                        ? sismoConnectVerifiedResult.claims
+                            .filter(
+                              (verifiedClaim) =>
+                                verifiedClaim.groupId == claim.groupId &&
+                                verifiedClaim.claimType == claim.claimType
+                            )
+                            .map((verifiedClaim) => verifiedClaim.value)
+                        : "Not Proved"}
+                    </td>
+                  ) : (
+                    <td> ZK Proofs not verified yet </td>
+                  )}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </>
       </main>
     </>
   );
+}
+
+function readibleUserId(userId: string, startLength = 6, endLength = 4, separator = "...") {
+  if (!userId.startsWith("0x")) {
+    return userId; // Return the original string if it doesn't start with "0x"
+  }
+  return userId.substring(0, startLength) + separator + userId.substring(userId.length - endLength);
 }

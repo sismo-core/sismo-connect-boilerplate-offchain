@@ -1,27 +1,16 @@
 .main {
-  margin: 30vh auto 0 auto;
+  margin: 5vh auto;
+  padding: 2em; 
   position: relative;
   display: flex;
   flex-direction: column;
-  width: 750px;
+  width: 90%; /* Here we're setting the main content to take up 90% of the viewport's width. */
+  max-width: 1200px; /* This will prevent the content from becoming too wide on large screens. */
+  background-color: #282c34; /* change this to the color you prefer */
+  border-radius: 8px; /* adds rounded corners */
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); /* adds slight shadow for a "lifted" effect */
 }
 
-.disconnect {
-  position: fixed;
-  margin-top: 0;
-  margin: 32px auto;
-  background: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  top: 40px;
-  right: 40px;
-  width: 120px;
-  height: 50px;
-  font-weight: 600;
-  font-size: 18px;
-  line-height: 22px;
-}
 
 .error {
   border: 1px solid red;
