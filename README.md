@@ -1,6 +1,7 @@
-# Sismo Connect - Offchain Boilerplate Repository
+# Sismo Connect Offchain Starter
 
-This repository aims at providing simple boilerplate showing how to integrate Sismo Connect offchain while allowing you to test the integration locally as easily as possible.
+This repository aims at providing simple repository to get started using Sismo Connect for offchain use cases.
+It uses Next.js and Sismo Connect.
 
 ## Usage
 

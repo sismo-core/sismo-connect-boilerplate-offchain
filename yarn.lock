@@ -593,17 +593,17 @@
     pako "^2.1.0"
     viem "^0.3.1"
 
-"@sismo-core/sismo-connect-react@0.0.16":
-  version "0.0.16"
-  resolved "https://registry.yarnpkg.com/@sismo-core/sismo-connect-react/-/sismo-connect-react-0.0.16.tgz#9c660f0fcd71d4497b5c1cc98f37c8b1b439e4d0"
-  integrity sha512-hZG+3AAUmTZ4Jsr9zypLfhWDRWvInbfBgVwNjnVpWPa1PUmfhVxn69b/zJL756TfENkgZqhIpknp1cvUN0Hmnw==
+"@sismo-core/sismo-connect-react@0.0.17":
+  version "0.0.17"
+  resolved "https://registry.yarnpkg.com/@sismo-core/sismo-connect-react/-/sismo-connect-react-0.0.17.tgz#6f089d68df75a0ed485d42216980d44bc7fcd8e6"
+  integrity sha512-kffefmj+wUbClA3fsR/DsVUKbro8Fu/WBRB45J8XxnJgL2Xm4dJJ/tSrWDubc6I8JWKY4euezZfj6p8ISYFvsQ==
   dependencies:
     "@sismo-core/sismo-connect-client" "0.0.16"
 
-"@sismo-core/sismo-connect-server@0.0.16":
-  version "0.0.16"
-  resolved "https://registry.yarnpkg.com/@sismo-core/sismo-connect-server/-/sismo-connect-server-0.0.16.tgz#b32b90cc976197d38679bfecd09b56637a6471a8"
-  integrity sha512-E3mzc3OD0ZUJUKssu4eT86PxKDsOeI62rbwPQQDjrqPG+822G9YsbsjTKuzk72VaVimdohbbfmguoM7IiP5Fkg==
+"@sismo-core/sismo-connect-server@0.0.17":
+  version "0.0.17"
+  resolved "https://registry.yarnpkg.com/@sismo-core/sismo-connect-server/-/sismo-connect-server-0.0.17.tgz#74f5bfdc3763748fa96064001941a5bd95d2df93"
+  integrity sha512-niuO9UMq9+8tJMp1LYz2l56kabMhrHdrh8QKsbJ6adF/QX6kWf/wgJvBbD1uisPOdeJ7b12auifO99yA4GLvrg==
   dependencies:
     "@ethersproject/bignumber" "^5.7.0"
     "@sismo-core/hydra-s3" "^1.0.0"
