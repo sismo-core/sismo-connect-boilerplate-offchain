@@ -130,7 +130,11 @@ export default function Home() {
               {CLAIMS.map((claim, index) => (
                 <tr key={index}>
                   <td>Requested Claim {index + 1}</td>
-                  <td>{claim.groupId}</td>
+                  <td>
+                    <a href={"https://factory.sismo.io/groups-explorer?search=" + claim.groupId}>
+                      {claim.groupId}
+                    </a>
+                  </td>
                   <td>{claim.isSelectableByUser ? "yes" : "no"}</td>
                   <td>{claim.isOptional ? "yes" : "no"}</td>
                   <td>{claim.value ? claim.value : "1"}</td>
