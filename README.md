@@ -1,7 +1,13 @@
-# Sismo Connect Offchain Starter
+# Sismo Connect Starter: offchain app with Next.js
 
-This repository aims at providing simple repository to get started using Sismo Connect for offchain use cases.
-It uses Next.js and Sismo Connect.
+Start developping an offchain application, with
+- a frontend making ZK proofs requests via Sismo Connect
+- a backend that verifies ZK Proofs received via Sismo Connect
+
+#### Support
+
+- [Documentation](https://docs.sismo.io)
+- [Telegram group](https://builders.sismo.io)
 
 ## Usage
 
@@ -12,16 +18,12 @@ It uses Next.js and Sismo Connect.
 
 ### Install dependencies
 
-In a first terminal:
-
 ```bash
 # install frontend / backend dependencies
 yarn
 ```
 
 ### Start your local Next.js app
-
-In a new terminal:
 
 ```bash
 # this will start your Next.js app
@@ -31,5 +33,3 @@ yarn dev
 ```
 
 After this command, you will have your local application running on http://localhost:3000.
-
-As you will see, the app showcase simple examples on how to register user in a database while maintaining privacy.
