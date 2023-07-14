@@ -118,3 +118,23 @@ input:focus {
   outline: none;
   border-color: rgba(255, 255, 255, 1);
 }
+
+.code-snippet {
+  display: inline-block;
+  color: #333; 
+  background-color: #f9f9f9;
+  font-family: 'Courier New', monospace;
+  font-size: 1em;
+  padding: 2px 6px;
+  margin: 2px 0;
+  border-radius: 3px;
+}
+
+
+.callout {
+  color: #d3d3d3; /* Light gray color */
+  padding: 1rem; /* Adds some space around the text */
+  border: 1px solid #d3d3d3; /* Adds a light gray border */
+  border-radius: 5px; /* Rounds the corners of the border */
+  background-color: rgba(0,0,0,0.1); /* Adds a very light black background to increase readability of gray text */
+}
