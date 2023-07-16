@@ -21,6 +21,7 @@ import {
 export default function Home() {
   const [sismoConnectVerifiedResult, setSismoConnectVerifiedResult] =
     useState<SismoConnectVerifiedResult>();
+  const [sismoConnectResponse, setSismoConnectResponse] = useState<SismoConnectResponse>();
   const [pageState, setPageState] = useState<string>("init");
   /* ***********************  Application states *************************** */
   return (
@@ -42,6 +43,7 @@ export default function Home() {
               text="Prove With Sismo"
               // onResponseBytes calls a 'setResponse' function with the responseBytes returned by the Sismo Vault
               onResponse={async (response: SismoConnectResponse) => {
+                setSismoConnectResponse(response);
                 setPageState("verifying");
                 const verifiedResult = await fetch("/api/verify", {
                   method: "POST",
@@ -83,37 +85,86 @@ export default function Home() {
 
         {/* Table of the Sismo Connect requests and verified result */}
 
-        {/* Table of the Auths requests and their results */}
-        <h3>Auths requested and verified</h3>
+        {/* Table for Verified Auths */}
+        {sismoConnectVerifiedResult && (
+          <>
+            <h3>Verified Auths</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>Type of ZK Proof</th>
+                  <th>AuthType</th>
+                  <th>Verified UserId</th>
+                </tr>
+              </thead>
+              <tbody>
+                {sismoConnectVerifiedResult.auths.map((auth, index) => (
+                  <tr key={index}>
+                    <td>Auth</td>
+                    <td>{AuthType[auth.authType]}</td>
+                    <td>{auth.userId}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </>
+        )}
+
+        <br />
+
+        {/* Table for Verified Claims */}
+        {sismoConnectVerifiedResult && (
+          <>
+            <h3>Verified Claims</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>groupId</th>
+                  <th>ClaimType</th>
+                  <th>Verified Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                {sismoConnectVerifiedResult.claims.map((claim, index) => (
+                  <tr key={index}>
+                    <td>
+                      <a
+                        target="_blank"
+                        href={"https://factory.sismo.io/groups-explorer?search=" + claim.groupId}
+                      >
+                        {claim.groupId}
+                      </a>
+                    </td>
+                    <td>{ClaimType[claim.claimType!]}</td>
+                    <td>{claim.value}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </>
+        )}
+
+        {/* Table of the Auths requests*/}
+        <h3>Auths requested</h3>
         <table>
           <thead>
             <tr>
-              <th>Authentication Requests</th>
               <th>AuthType</th>
               <th>Requested UserId</th>
-              <th>Verified UserId</th>
+              <th>Optional?</th>
+              <th>ZK proof</th>
             </tr>
           </thead>
           <tbody>
             {AUTHS.map((auth, index) => (
               <tr key={index}>
-                <td>{`Requested Auth #${index + 1} (${
-                  auth.isOptional ? "optional" : "required"
-                })`}</td>
                 <td>{AuthType[auth.authType]}</td>
-                <td>{readibleUserId(auth.userId || "No userId requested")}</td>
-                {sismoConnectVerifiedResult ? (
-                  <td>
-                    {sismoConnectVerifiedResult.auths.filter(
-                      (verifiedAuth) => verifiedAuth.authType == auth.authType
-                    ).length > 0
-                      ? sismoConnectVerifiedResult.auths
-                          .filter((verifiedAuth) => verifiedAuth.authType == auth.authType)
-                          .map((verifiedAuth) => readibleUserId(verifiedAuth.userId!))
-                      : "No proof provided"}
-                  </td>
+                <td>{readibleHex(auth.userId || "No userId requested")}</td>
+                <td>{auth.isOptional ? "optional" : "required"}</td>
+                {sismoConnectResponse ? (
+                  <td>{readibleHex(getProofDataForAuth(sismoConnectResponse, auth.authType)!)}</td>
                 ) : (
-                  <td> ZK proof not verified yet </td>
+                  <td> ZK proof not generated yet </td>
                 )}
               </tr>
             ))}
@@ -122,24 +173,21 @@ export default function Home() {
         <br />
 
         {/* Table of the Claims requests  and their results */}
-        <h3>Claims requested and verified</h3>
+        <h3>Claims requested</h3>
         <table>
           <thead>
             <tr>
-              <th>Claim</th>
               <th>GroupId</th>
-              <th>Can User Select Value?</th>
-              <th>Requested Value</th>
               <th>ClaimType</th>
-              <th>Verified Value</th>
+              <th>Requested Value</th>
+              <th>Can User Select Value?</th>
+              <th>Optional?</th>
+              <th>ZK proof</th>
             </tr>
           </thead>
           <tbody>
             {CLAIMS.map((claim, index) => (
               <tr key={index}>
-                <td>{`Requested Claim #${index + 1} (${
-                  claim.isOptional ? "optional" : "required"
-                })`}</td>
                 <td>
                   <a
                     target="_blank"
@@ -148,21 +196,23 @@ export default function Home() {
                     {claim.groupId}
                   </a>
                 </td>
-                <td>{claim.isSelectableByUser ? "yes" : "no"}</td>
-                <td>{claim.value ? claim.value : "1"}</td>
                 <td>{ClaimType[claim.claimType || "1"]}</td>
-                {sismoConnectVerifiedResult ? (
+                <td>{claim.value ? claim.value : "1"}</td>
+                <td>{claim.isSelectableByUser ? "yes" : "no"}</td>
+                <td>{claim.isOptional ? "optional" : "required"}</td>
+                {sismoConnectResponse ? (
                   <td>
-                    {sismoConnectVerifiedResult.claims.filter(
-                      (verifiedClaim) => verifiedClaim.groupId == claim.groupId
-                    ).length > 0
-                      ? sismoConnectVerifiedResult.claims
-                          .filter((verifiedClaim) => verifiedClaim.groupId == claim.groupId)
-                          .map((verifiedClaim) => verifiedClaim.value)
-                      : "No proof provided"}
+                    {readibleHex(
+                      getProofDataForClaim(
+                        sismoConnectResponse,
+                        claim.claimType || 0,
+                        claim.groupId!,
+                        claim.value || 1
+                      )!
+                    )}
                   </td>
                 ) : (
-                  <td> ZK proof not verified yet </td>
+                  <td> ZK proof not generated yet </td>
                 )}
               </tr>
             ))}
@@ -196,9 +246,45 @@ export default function Home() {
   );
 }
 
-function readibleUserId(userId: string, startLength = 6, endLength = 4, separator = "...") {
+function readibleHex(userId: string, startLength = 6, endLength = 4, separator = "...") {
   if (!userId.startsWith("0x")) {
     return userId; // Return the original string if it doesn't start with "0x"
   }
   return userId.substring(0, startLength) + separator + userId.substring(userId.length - endLength);
+}
+
+function getProofDataForAuth(
+  sismoConnectResponse: SismoConnectResponse,
+  authType: AuthType
+): string | null {
+  for (const proof of sismoConnectResponse.proofs) {
+    if (proof.auths) {
+      for (const auth of proof.auths) {
+        if (auth.authType === authType) {
+          return proof.proofData;
+        }
+      }
+    }
+  }
+
+  return null; // returns null if no matching authType is found
+}
+
+function getProofDataForClaim(
+  sismoConnectResponse: SismoConnectResponse,
+  claimType: number,
+  groupId: string,
+  value: number
+): string | null {
+  for (const proof of sismoConnectResponse.proofs) {
+    if (proof.claims) {
+      for (const claim of proof.claims) {
+        if (claim.claimType === claimType && claim.groupId === groupId && claim.value === value) {
+          return proof.proofData;
+        }
+      }
+    }
+  }
+
+  return null; // returns null if no matching claimType, groupId and value are found
 }
