@@ -91,7 +91,6 @@ export default function Home() {
             <table>
               <thead>
                 <tr>
-                  <th>Type of ZK Proof</th>
                   <th>AuthType</th>
                   <th>Verified UserId</th>
                 </tr>
@@ -99,7 +98,6 @@ export default function Home() {
               <tbody>
                 {sismoConnectVerifiedResult.auths.map((auth, index) => (
                   <tr key={index}>
-                    <td>Auth</td>
                     <td>{AuthType[auth.authType]}</td>
                     <td>{auth.userId}</td>
                   </tr>
