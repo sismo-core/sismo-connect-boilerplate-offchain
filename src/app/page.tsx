@@ -1,6 +1,5 @@
 "use client";
 
-import styles from "./page.module.css";
 import { useState } from "react";
 import Header from "./components/Header";
 import {
@@ -26,7 +25,7 @@ export default function Home() {
   /* ***********************  Application states *************************** */
   return (
     <>
-      <main className={styles.main}>
+      <main className="main">
         <Header />
         {pageState == "init" ? (
           <>
@@ -196,7 +195,7 @@ export default function Home() {
                     {claim.groupId}
                   </a>
                 </td>
-                <td>{ClaimType[claim.claimType || "1"]}</td>
+                <td>{ClaimType[claim.claimType || 0]}</td>
                 <td>{claim.value ? claim.value : "1"}</td>
                 <td>{claim.isSelectableByUser ? "yes" : "no"}</td>
                 <td>{claim.isOptional ? "optional" : "required"}</td>
