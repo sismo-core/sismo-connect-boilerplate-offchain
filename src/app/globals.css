@@ -5,6 +5,32 @@
   font-family: Arial, sans-serif; /* Added a basic font fallback */
 }
 
+.main {
+  margin: 5vh auto;
+  padding: 2em; 
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 90%; /* Here we're setting the main content to take up 90% of the viewport's width. */
+  max-width: 1200px; /* This will prevent the content from becoming too wide on large screens. */
+  background-color: #282c34; /* change this to the color you prefer */
+  border-radius: 8px; /* adds rounded corners */
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); /* adds slight shadow for a "lifted" effect */
+}
+
+
+.error {
+  border: 1px solid red;
+  padding: 12px;
+  border-radius: 5px;
+  width: 100%;
+  white-space: pre-wrap;
+  word-break: break-all;
+  color: red;
+  margin: 0 auto;
+}
+
+
 html,
 body {
   max-width: 100vw;
