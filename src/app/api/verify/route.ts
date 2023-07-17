@@ -1,23 +1,10 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 
-import {
-  SismoConnect,
-  AuthType,
-  SismoConnectVerifiedResult,
-  ClaimType,
-  SismoConnectConfig,
-} from "@sismo-core/sismo-connect-server";
+import { SismoConnect, SismoConnectVerifiedResult } from "@sismo-core/sismo-connect-server";
 import { NextResponse } from "next/server";
 import { AUTHS, CLAIMS, CONFIG, SIGNATURE_REQUEST } from "../../sismo-connect-config.ts";
 
-/************************************************ */
-/********* A SIMPLE IN-MEMORY DATABASE ********** */
-/************************************************ */
 const sismoConnect = SismoConnect({ config: CONFIG });
-
-/************************************************ */
-/***************** THE API ROUTE **************** */
-/************************************************ */
 
 // this is the API route that is called by the SismoConnectButton
 export async function POST(req: Request) {

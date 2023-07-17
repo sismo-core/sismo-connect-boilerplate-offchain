@@ -1,14 +1,20 @@
 import React from "react";
 
-const Header: React.FC = () => {
+export default function Header() {
   return (
     <>
       <h1>
         <b> Sismo Connect Starter: offchain app with Next.js</b>
       </h1>
       <h3>
-        <a href="https://docs.sismo.io"> Read the docs | </a>
-        <a href="https://builders.sismo.io"> Join the Telegram Builders Group </a>
+        <a href="https://docs.sismo.io" target="_blank">
+          {" "}
+          Read the docs |{" "}
+        </a>
+        <a href="https://builders.sismo.io" target="_blank">
+          {" "}
+          Join the Telegram Builders Group{" "}
+        </a>
       </h3>
       <p>
         1. The frontend requests ZK Proofs via Sismo Connect Button <br />
@@ -42,6 +48,4 @@ const Header: React.FC = () => {
       </div>
     </>
   );
-};
-
-export default Header;
+}
