@@ -7,7 +7,6 @@ import {
   SismoConnectResponse,
   SismoConnectVerifiedResult,
 } from "@sismo-core/sismo-connect-react";
-
 import {
   CONFIG,
   AUTHS,
@@ -22,7 +21,7 @@ export default function Home() {
     useState<SismoConnectVerifiedResult>();
   const [sismoConnectResponse, setSismoConnectResponse] = useState<SismoConnectResponse>();
   const [pageState, setPageState] = useState<string>("init");
-  /* ***********************  Application states *************************** */
+
   return (
     <>
       <main className="main">
@@ -162,7 +161,7 @@ export default function Home() {
         </table>
         <br />
 
-        {/* Table of the Claims requests  and their results */}
+        {/* Table of the Claims requests*/}
         <h3>Claims requested</h3>
         <table>
           <thead>
