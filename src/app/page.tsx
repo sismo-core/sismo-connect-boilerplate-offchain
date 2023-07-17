@@ -31,16 +31,17 @@ export default function Home() {
           <>
             <SismoConnectButton
               config={CONFIG}
-              // Auths = Data Source Ownership Requests
+              // Auths = Data Source Ownership Requests. (e.g Wallets, Github, Twitter, Github)
               auths={AUTHS}
-              // Claims = prove groump membership of a Data Source in a specific Data Group.
+              // Claims = prove group membership of a Data Source in a specific Data Group.
+              // (e.g ENS DAO Voter, Minter of specific NFT, etc.)
               // Data Groups = [{[dataSource1]: value1}, {[dataSource1]: value1}, .. {[dataSource]: value}]
-              // When doing so Data Source is not shared to the app.
+              // Existing Data Groups and how to create one: https://factory.sismo.io/groups-explorer
               claims={CLAIMS}
-              // we ask the user to sign a message
+              // Signature = user can sign a message embedded in their zk proof
               signature={SIGNATURE_REQUEST}
               text="Prove With Sismo"
-              // onResponseBytes calls a 'setResponse' function with the responseBytes returned by the Sismo Vault
+              // Triggered when received Sismo Connect response from user data vault
               onResponse={async (response: SismoConnectResponse) => {
                 setSismoConnectResponse(response);
                 setPageState("verifying");
@@ -52,14 +53,6 @@ export default function Home() {
                 setPageState("verified");
               }}
             />
-            <p className="callout">
-              {" "}
-              Notes: <br />
-              1. First ZK Proof generation takes longer time, especially with bad internat as there
-              is a zkey file to download once in the data vault connection <br />
-              2. The more proofs you request, the longer it takes to generate them (about 2 secs per
-              proof)
-            </p>
           </>
         ) : (
           <>

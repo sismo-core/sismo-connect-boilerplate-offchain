@@ -31,6 +31,14 @@ const Header: React.FC = () => {
           <b className="code-snippet">src/api/verify/route.ts</b>: Backend - verify Sismo Connect
           request
         </p>
+        <p className="callout">
+          {" "}
+          Notes: <br />
+          1. First ZK Proof generation takes longer time, especially with bad internet as there is a
+          zkey file to download once in the data vault connection <br />
+          2. The more proofs you request, the longer it takes to generate them (about 2 secs per
+          proof)
+        </p>
       </div>
     </>
   );
