@@ -161,7 +161,7 @@ export default function Home() {
         </table>
         <br />
 
-        {/* Table of the Claims requests  and their results */}
+        {/* Table of the Claims requests*/}
         <h3>Claims requested</h3>
         <table>
           <thead>
