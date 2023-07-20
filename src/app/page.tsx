@@ -48,8 +48,12 @@ export default function Home() {
                   method: "POST",
                   body: JSON.stringify(response),
                 });
-                setSismoConnectVerifiedResult(await verifiedResult.json());
-                setPageState("verified");
+                if (verifiedResult.ok) {
+                  setSismoConnectVerifiedResult(await verifiedResult.json());
+                  setPageState("verified");
+                } else {
+                  setPageState("error");
+                }
               }}
             />
           </>
@@ -68,7 +72,13 @@ export default function Home() {
               {pageState == "verifying" ? (
                 <span className="verifying"> Verifying ZK Proofs... </span>
               ) : (
-                <span className="verified"> ZK Proofs verified!</span>
+                <>
+                  {pageState !== "error" ? (
+                    <span className="verified"> ZK Proofs verified!</span>
+                  ) : (
+                    <span className="error"> Error verifying ZK Proofs </span>
+                  )}
+                </>
               )}
             </div>
           </>
