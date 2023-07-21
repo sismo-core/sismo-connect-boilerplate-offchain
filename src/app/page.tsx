@@ -21,6 +21,7 @@ export default function Home() {
     useState<SismoConnectVerifiedResult>();
   const [sismoConnectResponse, setSismoConnectResponse] = useState<SismoConnectResponse>();
   const [pageState, setPageState] = useState<string>("init");
+  const [error, setError] = useState<string>("");
 
   return (
     <>
@@ -48,11 +49,13 @@ export default function Home() {
                   method: "POST",
                   body: JSON.stringify(response),
                 });
+                const data = await verifiedResult.json();
                 if (verifiedResult.ok) {
-                  setSismoConnectVerifiedResult(await verifiedResult.json());
+                  setSismoConnectVerifiedResult(data);
                   setPageState("verified");
                 } else {
                   setPageState("error");
+                  setError(data);
                 }
               }}
             />
@@ -73,10 +76,10 @@ export default function Home() {
                 <span className="verifying"> Verifying ZK Proofs... </span>
               ) : (
                 <>
-                  {pageState !== "error" ? (
-                    <span className="verified"> ZK Proofs verified!</span>
+                  {Boolean(error) ? (
+                    <span className="error"> Error verifying ZK Proofs: {error} </span>
                   ) : (
-                    <span className="error"> Error verifying ZK Proofs </span>
+                    <span className="verified"> ZK Proofs verified!</span>
                   )}
                 </>
               )}
