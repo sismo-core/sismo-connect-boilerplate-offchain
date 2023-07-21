@@ -583,27 +583,27 @@
     ethers "^5.6.1"
     tslib "^2.4.0"
 
-"@sismo-core/sismo-connect-client@0.0.18":
-  version "0.0.18"
-  resolved "https://registry.yarnpkg.com/@sismo-core/sismo-connect-client/-/sismo-connect-client-0.0.18.tgz#81792b1bfa4f7b52a33fc54441fdaa371f473a0e"
-  integrity sha512-peZsp6Fm6JSXrzbosfJuFeFNy411TKtLjTM2cT5gP6qZxoWjSu/oqlo7H57DzFiq2ZWhQp/nAVxcD32eheqRyw==
+"@sismo-core/sismo-connect-client@0.0.20":
+  version "0.0.20"
+  resolved "https://registry.yarnpkg.com/@sismo-core/sismo-connect-client/-/sismo-connect-client-0.0.20.tgz#d0337f1e6c678b2e67f0c8dff2794c4a4e869e94"
+  integrity sha512-2AEfnVGQfhEwWqyTtBF9o2kOlm22cPmM+qG70zyZW+oN169rT9b9MMqM9qkWkknGm6aTPg8wq0dBQUbmaG8DsA==
   dependencies:
     "@ethersproject/bignumber" "5.7.0"
     js-base64 "^3.7.5"
     pako "^2.1.0"
     viem "^0.3.1"
 
-"@sismo-core/sismo-connect-react@0.0.18":
-  version "0.0.18"
-  resolved "https://registry.yarnpkg.com/@sismo-core/sismo-connect-react/-/sismo-connect-react-0.0.18.tgz#5a8ac7a44e825eeaf21030bc57a9ab491cc3ab8e"
-  integrity sha512-IHzUO4u1ZUqkD5q9QysSEwmliyMLltykSNDq0mY4EMSKYflVpuN+hGDq7bN9eEIfFvp6c2a2w9tLUZg49tabpQ==
+"@sismo-core/sismo-connect-react@0.0.20":
+  version "0.0.20"
+  resolved "https://registry.yarnpkg.com/@sismo-core/sismo-connect-react/-/sismo-connect-react-0.0.20.tgz#602c3703d1c7d90c31c17882d3aacb2c8ebeb333"
+  integrity sha512-8hc4Qh2aaowhGxudeTFA+ZWGb7OLJR7c4ui4VNd+fDqr84extCz2XKIm+tFaFQJTGP/FFGxt/GKAyBSaPGfymw==
   dependencies:
-    "@sismo-core/sismo-connect-client" "0.0.18"
+    "@sismo-core/sismo-connect-client" "0.0.20"
 
-"@sismo-core/sismo-connect-server@0.0.18":
-  version "0.0.18"
-  resolved "https://registry.yarnpkg.com/@sismo-core/sismo-connect-server/-/sismo-connect-server-0.0.18.tgz#526840bd4558e20f600d05f951fd8d4c6fcfb973"
-  integrity sha512-JedkYn2YFh01dR1+4GG7k7p8qqo3hs1HueqYrZ1EauVQyM8QSxVq9JotAWxQmSSb3N8ShjCGEMXOYB4J66ojoQ==
+"@sismo-core/sismo-connect-server@0.0.20":
+  version "0.0.20"
+  resolved "https://registry.yarnpkg.com/@sismo-core/sismo-connect-server/-/sismo-connect-server-0.0.20.tgz#2b2dc1ac26e54b7b44eaa4a1ed392d7bf0b84093"
+  integrity sha512-i+p9JNh84RqHiUKssdMwR70ltzz7ahTv1sKI0FFgz80v6P+I0GbtZ2DI850mwnhPdKiekvvyfUgsr+8tyn/15w==
   dependencies:
     "@ethersproject/bignumber" "^5.7.0"
     "@sismo-core/hydra-s3" "^1.0.0"
