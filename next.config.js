@@ -1,12 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  webpack: (config) => {
-    config.resolve.fallback = { "utf-8-validate": false, bufferutil: false };
-    config.experiments = {
-      ...config.experiments,
-    };
-    return config;
+  experimental: {
+    serverComponentsExternalPackages: ["@sismo-core/sismo-connect-server"],
   },
-};
+}
 
-module.exports = nextConfig;
+module.exports = nextConfig
